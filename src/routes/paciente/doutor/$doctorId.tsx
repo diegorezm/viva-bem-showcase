@@ -9,13 +9,14 @@ import { mockSymptomReports } from '@/lib/mock-data'
 import { SymptomForm } from '@/components/patient/symptom-form'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 
 export const Route = createFileRoute('/paciente/doutor/$doctorId')({
   component: DoutorPage,
 })
 
 function DoutorPage() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { doctorId } = Route.useParams()
   const patientId = 'p1'
 
@@ -36,9 +37,11 @@ function DoutorPage() {
   }
 
   const doctor = doctorData[doctorId]
-  const [reports, setReports] = useState<Array<SymptomReport>>(
-    mockSymptomReports.filter((r) => r.patientId === patientId),
-  )
+
+  const [reports, setReports] = useState<Array<SymptomReport>>(() => {
+    if (typeof window === 'undefined') return []
+    return mockSymptomReports.filter((r) => r.patientId === patientId)
+  })
 
   function handleSubmit(
     data: Omit<
@@ -46,6 +49,8 @@ function DoutorPage() {
       'id' | 'patientName' | 'patientId' | 'createdAt' | 'status'
     >,
   ) {
+    if (typeof window === 'undefined') return
+
     const newReport: SymptomReport = {
       id: `r-${Date.now()}`,
       patientId,
@@ -57,6 +62,7 @@ function DoutorPage() {
 
     mockSymptomReports.push(newReport)
     setReports((prev) => [newReport, ...prev])
+    setIsDialogOpen(false)
   }
 
   return (
@@ -83,8 +89,9 @@ function DoutorPage() {
               {reports.map((r) => (
                 <li key={r.id} className="border p-3 rounded-md">
                   <p className="font-medium">
-                    {new Date(r.createdAt).toLocaleDateString()} — Gravidade:{' '}
-                    {r.severity}
+                    {typeof window !== 'undefined' &&
+                      new Date(r.createdAt).toLocaleDateString()}{' '}
+                    — Gravidade: {r.severity}
                   </p>
                   <p className="text-sm text-muted-foreground">
                     {r.symptoms.join(', ')}
@@ -110,13 +117,17 @@ function DoutorPage() {
 
       {/* Mobile Dialog for Form */}
       <div className="lg:hidden fixed bottom-6 right-6">
-        <Dialog>
-          <DialogTrigger>
-            <Button className="rounded-full shadow-lg">
-              <RiHeartAdd2Fill className="size-4" />
-              Reportar Sintoma
-            </Button>
-          </DialogTrigger>
+        <Button onClick={() => setIsDialogOpen(true)}>
+          <RiHeartAdd2Fill className="size-4" />
+          Reportar Sintoma
+        </Button>
+
+        <Dialog
+          open={isDialogOpen}
+          onOpenChange={(p) => {
+            setIsDialogOpen(p)
+          }}
+        >
           <DialogContent className="p-0">
             <SymptomForm onSubmit={handleSubmit} />
           </DialogContent>
