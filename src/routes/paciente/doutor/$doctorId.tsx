@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createFileRoute, useParams } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 
 import { RiHeartAdd2Fill } from '@remixicon/react'
 
@@ -16,7 +16,7 @@ export const Route = createFileRoute('/paciente/doutor/$doctorId')({
 })
 
 function DoutorPage() {
-  const { doctorId } = useParams({ from: '/paciente/doutor/$doctorId' })
+  const { doctorId } = Route.useParams()
   const patientId = 'p1'
 
   const doctorData: Record<
