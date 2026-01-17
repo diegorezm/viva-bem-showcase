@@ -9,38 +9,88 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PacienteRouteImport } from './routes/paciente'
+import { Route as DoutorRouteImport } from './routes/doutor'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PacienteIndexRouteImport } from './routes/paciente/index'
+import { Route as DoutorIndexRouteImport } from './routes/doutor/index'
 
+const PacienteRoute = PacienteRouteImport.update({
+  id: '/paciente',
+  path: '/paciente',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DoutorRoute = DoutorRouteImport.update({
+  id: '/doutor',
+  path: '/doutor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PacienteIndexRoute = PacienteIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PacienteRoute,
+} as any)
+const DoutorIndexRoute = DoutorIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DoutorRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/doutor': typeof DoutorRouteWithChildren
+  '/paciente': typeof PacienteRouteWithChildren
+  '/doutor/': typeof DoutorIndexRoute
+  '/paciente/': typeof PacienteIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/doutor': typeof DoutorIndexRoute
+  '/paciente': typeof PacienteIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/doutor': typeof DoutorRouteWithChildren
+  '/paciente': typeof PacienteRouteWithChildren
+  '/doutor/': typeof DoutorIndexRoute
+  '/paciente/': typeof PacienteIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/doutor' | '/paciente' | '/doutor/' | '/paciente/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/doutor' | '/paciente'
+  id: '__root__' | '/' | '/doutor' | '/paciente' | '/doutor/' | '/paciente/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DoutorRoute: typeof DoutorRouteWithChildren
+  PacienteRoute: typeof PacienteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/paciente': {
+      id: '/paciente'
+      path: '/paciente'
+      fullPath: '/paciente'
+      preLoaderRoute: typeof PacienteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/doutor': {
+      id: '/doutor'
+      path: '/doutor'
+      fullPath: '/doutor'
+      preLoaderRoute: typeof DoutorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +98,50 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/paciente/': {
+      id: '/paciente/'
+      path: '/'
+      fullPath: '/paciente/'
+      preLoaderRoute: typeof PacienteIndexRouteImport
+      parentRoute: typeof PacienteRoute
+    }
+    '/doutor/': {
+      id: '/doutor/'
+      path: '/'
+      fullPath: '/doutor/'
+      preLoaderRoute: typeof DoutorIndexRouteImport
+      parentRoute: typeof DoutorRoute
+    }
   }
 }
 
+interface DoutorRouteChildren {
+  DoutorIndexRoute: typeof DoutorIndexRoute
+}
+
+const DoutorRouteChildren: DoutorRouteChildren = {
+  DoutorIndexRoute: DoutorIndexRoute,
+}
+
+const DoutorRouteWithChildren =
+  DoutorRoute._addFileChildren(DoutorRouteChildren)
+
+interface PacienteRouteChildren {
+  PacienteIndexRoute: typeof PacienteIndexRoute
+}
+
+const PacienteRouteChildren: PacienteRouteChildren = {
+  PacienteIndexRoute: PacienteIndexRoute,
+}
+
+const PacienteRouteWithChildren = PacienteRoute._addFileChildren(
+  PacienteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DoutorRoute: DoutorRouteWithChildren,
+  PacienteRoute: PacienteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

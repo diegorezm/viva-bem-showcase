@@ -1,11 +1,17 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute("/")({ component: App });
+import { SymptomForm } from '@/components/patient/symptom-form'
+
+export const Route = createFileRoute('/')({ component: App })
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
-      <div className="font-medium">Hello World</div>
+    <div className="max-w-4xl mx-auto mt-6">
+      <SymptomForm
+        onSubmit={(v) => {
+          console.log(v)
+        }}
+      />
     </div>
-  );
+  )
 }
