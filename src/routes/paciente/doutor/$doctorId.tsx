@@ -1,20 +1,15 @@
 import { useState } from 'react'
 import { createFileRoute, useParams } from '@tanstack/react-router'
 
+import { RiHeartAdd2Fill } from '@remixicon/react'
+
 import type { SymptomReport } from '@/lib/types'
 import { mockSymptomReports } from '@/lib/mock-data'
 
 import { SymptomForm } from '@/components/patient/symptom-form'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import { RiHeartAdd2Fill } from '@remixicon/react'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 
 export const Route = createFileRoute('/paciente/doutor/$doctorId')({
   component: DoutorPage,
@@ -122,7 +117,7 @@ function DoutorPage() {
               Reportar Sintoma
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="p-0">
             <SymptomForm onSubmit={handleSubmit} />
           </DialogContent>
         </Dialog>
