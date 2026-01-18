@@ -46,7 +46,7 @@ interface SymptomFormProps {
 }
 
 export function SymptomForm({ onSubmit }: SymptomFormProps) {
-  const [selectedSymptoms, setSelectedSymptoms] = useState<Array<string>>([])
+  const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([])
   const [severity, setSeverity] = useState<Severity>('leve')
   const [description, setDescription] = useState('')
   const [duration, setDuration] = useState('')
@@ -70,7 +70,6 @@ export function SymptomForm({ onSubmit }: SymptomFormProps) {
       duration,
     })
 
-    // Resetar o formulário
     setSelectedSymptoms([])
     setSeverity('leve')
     setDescription('')
@@ -85,26 +84,46 @@ export function SymptomForm({ onSubmit }: SymptomFormProps) {
           Selecione seus sintomas e forneça detalhes para o seu médico
         </CardDescription>
       </CardHeader>
+
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Sintomas */}
           <div className="space-y-3">
             <Label className="text-sm font-medium">Selecione os Sintomas</Label>
-            <div className="grid grid-cols-2 gap-3">
-              {commonSymptoms.map((symptom) => (
-                <div key={symptom} className="flex items-center gap-2">
-                  <Checkbox
-                    id={symptom}
-                    checked={selectedSymptoms.includes(symptom)}
-                    onCheckedChange={() => handleSymptomToggle(symptom)}
-                  />
-                  <Label
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {commonSymptoms.map((symptom) => {
+                const checked = selectedSymptoms.includes(symptom)
+
+                return (
+                  <label
+                    key={symptom}
                     htmlFor={symptom}
-                    className="text-sm font-normal cursor-pointer"
+                    className={`
+                      flex items-center justify-center
+                      rounded-lg border
+                      px-3 py-2
+                      text-sm font-medium
+                      cursor-pointer
+                      transition-all
+                      ${
+                        checked
+                          ? 'bg-primary/10 border-primary text-primary'
+                          : 'bg-muted border-border hover:bg-muted/70'
+                      }
+                    `}
                   >
+                    <Checkbox
+                      id={symptom}
+                      checked={checked}
+                      onCheckedChange={() => handleSymptomToggle(symptom)}
+                      className="hidden"
+                    />
+                    {checked && <span className="mr-1">✓</span>}
                     {symptom}
-                  </Label>
-                </div>
-              ))}
+                  </label>
+                )
+              })}
             </div>
           </div>
 
@@ -113,7 +132,7 @@ export function SymptomForm({ onSubmit }: SymptomFormProps) {
               <Label htmlFor="severity">Gravidade</Label>
               <Select
                 value={severity}
-                onValueChange={(v) => setSeverity(v as typeof severity)}
+                onValueChange={(v) => setSeverity(v as Severity)}
               >
                 <SelectTrigger id="severity">
                   <SelectValue />
