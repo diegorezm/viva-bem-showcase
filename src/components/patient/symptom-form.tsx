@@ -47,7 +47,7 @@ interface SymptomFormProps {
 
 export function SymptomForm({ onSubmit }: SymptomFormProps) {
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([])
-  const [severity, setSeverity] = useState<Severity>('leve')
+  const [severity, setSeverity] = useState<Severity>('Leve')
   const [description, setDescription] = useState('')
   const [duration, setDuration] = useState('')
 
@@ -71,7 +71,7 @@ export function SymptomForm({ onSubmit }: SymptomFormProps) {
     })
 
     setSelectedSymptoms([])
-    setSeverity('leve')
+    setSeverity('Leve')
     setDescription('')
     setDuration('')
   }
@@ -87,7 +87,6 @@ export function SymptomForm({ onSubmit }: SymptomFormProps) {
 
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Sintomas */}
           <div className="space-y-3">
             <Label className="text-sm font-medium">Selecione os Sintomas</Label>
 
@@ -138,9 +137,9 @@ export function SymptomForm({ onSubmit }: SymptomFormProps) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="leve">Leve</SelectItem>
-                  <SelectItem value="moderada">Moderada</SelectItem>
-                  <SelectItem value="grave">Grave</SelectItem>
+                  <SelectItem value="Leve">Leve</SelectItem>
+                  <SelectItem value="Moderada">Moderada</SelectItem>
+                  <SelectItem value="Grave">Grave</SelectItem>
                 </SelectContent>
               </Select>
             </div>

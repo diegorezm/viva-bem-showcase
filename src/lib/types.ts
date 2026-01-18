@@ -13,7 +13,7 @@ export interface Doctor {
   email: string
 }
 
-export type Severity = 'leve' | 'moderada' | 'grave'
+export type Severity = 'Leve' | 'Moderada' | 'Grave'
 
 export interface SymptomReport {
   id: string
