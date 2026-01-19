@@ -1,7 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { RiArrowLeftSLine } from '@remixicon/react'
 import { mockAppointments, mockSymptomReports } from '@/lib/mock-data'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { SymptomFrequencyChart } from '@/components/patient/symptom-frequency'
+import { Button } from '@/components/ui/button'
 
 export const Route = createFileRoute('/doutor/paciente/$pacienteId')({
   component: RouteComponent,
@@ -27,6 +29,12 @@ function RouteComponent() {
     <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 mt-8">
       {/* Left – Patient Reports */}
       <div className="space-y-6">
+        <Link to="/doutor">
+          <Button className={'mb-2'}>
+            <RiArrowLeftSLine />
+            Voltar
+          </Button>
+        </Link>
         <Card>
           <CardHeader>
             <CardTitle>{patientName}</CardTitle>
