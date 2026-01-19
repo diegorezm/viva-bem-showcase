@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 
-import { RiHeartAdd2Fill } from '@remixicon/react'
+import { RiArrowLeftSLine, RiHeartAdd2Fill } from '@remixicon/react'
 
 import type { SymptomReport } from '@/lib/types'
 import { mockSymptomReports } from '@/lib/mock-data'
@@ -69,6 +69,12 @@ function DoutorPage() {
     <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 pb-2 mt-10">
       {/* Left/Main column */}
       <div className="space-y-6">
+        <Link to="/paciente">
+          <Button className={'mb-2'}>
+            <RiArrowLeftSLine />
+            Voltar
+          </Button>
+        </Link>
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl font-bold">{doctor.name}</CardTitle>
